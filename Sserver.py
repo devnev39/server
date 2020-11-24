@@ -37,16 +37,7 @@ try:
 				return True
 
 		return False
-
-
-	def WebHandler(acc,addr):
-		bts = []
-		with open('test.htm','r') as fl:
-			for e in fl:
-				bts = btyes(e,'utf-8')
-	
-		acc.send(bts)
-		return			
+		
 
 	def scmd(cmd,acc,addr):
 		if(cmd==1):
@@ -79,9 +70,6 @@ try:
 			acc.send(bytes(getCons(),'ascii'))
 			Process(acc,addr)
 
-		if(smg=='GET / HTTP/1.1'):
-			WebHanlder(acc,addr)
-			return
 		print('from {0} : {1}'.format(addr,smg))
 		if(smg=='cmds'):
 			acc.send(bytes('1.fltrans/n2:path'))
