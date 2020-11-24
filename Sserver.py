@@ -63,8 +63,7 @@ try:
 			acc.send(bytes(constr(),'ascii'))
 
 		if(isAddr(smg)):
-
-
+			#this is for git testing 
 
 		if(smg=='GET / HTTP/1.1'):
 			WebHanlder(acc,addr)
