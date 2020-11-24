@@ -17,6 +17,14 @@ try:
 	s.bind((socket.gethostname(),1234))
 	s.listen(0)
 
+	def getCons(lst_con):
+		s = ''
+		if(len(lst_con)!=0):
+			for i in lst_con:
+				s+=i+'\n'
+							
+		return s	
+
 	def getAddr(smg):
 		if(isAddr(smg)):
 			lt = smg.split('$')
@@ -63,7 +71,13 @@ try:
 			acc.send(bytes(constr(),'ascii'))
 
 		if(isAddr(smg)):
-			#this is for git testing 
+			acc.send(bytes('Not ready yet...','ascii'))
+			Process(acc,addr)
+
+		# main2 branch feature
+		if(smg=='get_cons'):
+			acc.send(bytes(getCons(),'ascii'))
+			Process(acc,addr)
 
 		if(smg=='GET / HTTP/1.1'):
 			WebHanlder(acc,addr)
@@ -74,14 +88,14 @@ try:
 			cmd = int((acc.recv(1024)).decode())
 			scmd(cmd,acc,addr)
 			Process(acc,addr)
-		print('from {0},{1} : {2}'.format(lst_con.count(addr),addr,smg))			
+		print('from {0},{1} : {2}'.format(lst_con.index(addr),addr,smg))			
 		acc.send(bytes(smg.upper(),'ascii'))
 		Process(acc,addr)
 
 	while(True):
 		acc,addr = s.accept()
 		print('Connection from : {0}'.format(addr))
-		acc.send(cmd.encode())
+		acc.send(bytes(cmd,'ascii')) #main2
 		lst_con.append(addr)
 		thread = threading.Thread(target=Process,args=(acc,addr,))
 		thread.daemon = True
