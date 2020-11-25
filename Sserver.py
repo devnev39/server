@@ -16,13 +16,14 @@ s = socket.socket()
 try:
 	s.bind((socket.gethostname(),1234))
 	s.listen(0)
+	print('In listening state.....')
 
-	def getCons(lst_con):
+	def getCons():
 		s = ''
 		if(len(lst_con)!=0):
 			for i in lst_con:
 				s+=i+'\n'
-							
+		print(s)								
 		return s	
 
 	def getAddr(smg):
@@ -37,16 +38,7 @@ try:
 				return True
 
 		return False
-
-
-	def WebHandler(acc,addr):
-		bts = []
-		with open('test.htm','r') as fl:
-			for e in fl:
-				bts = btyes(e,'utf-8')
-	
-		acc.send(bts)
-		return			
+		
 
 	def scmd(cmd,acc,addr):
 		if(cmd==1):
@@ -65,38 +57,42 @@ try:
 		acc.send(bytes('successfully transfered data','ascii'))
 
 	def Process(acc,addr):
-		smg = (acc.recv(1024)).decode()
-		if(smg=='get_cons'):
-			print('from {0},{1} : {2}'.format(lst_con.count(addr),addr,smg))
-			acc.send(bytes(constr(),'ascii'))
+		try:
+			smg = (acc.recv(1024)).decode()
+			if(smg=='get_cons'):
+				print('from {0},{1} : {2}'.format(lst_con.count(addr),addr,smg))
+				acc.send(bytes(constr(),'ascii'))
 
-		if(isAddr(smg)):
-			acc.send(bytes('Not ready yet...','ascii'))
-			Process(acc,addr)
+			if(isAddr(smg)):
+				acc.send(bytes('Not ready yet...','ascii'))
+				Process(acc,addr)
 
 		# main2 branch feature
-		if(smg=='get_cons'):
-			acc.send(bytes(getCons(),'ascii'))
+			if(smg=='get_cons'):
+				acc.send(bytes(getCons(),'ascii'))
+				Process(acc,addr)
+
+			print('from {0} : {1}'.format(addr,smg))
+			if(smg=='cmds'):
+				acc.send(bytes('1.fltrans/n2:path'))
+				cmd = int((acc.recv(1024)).decode())
+				scmd(cmd,acc,addr)
+				Process(acc,addr)
+			print('from {0},{1} : {2}'.format(lst_con.index(str(addr)),addr,smg))			
+			acc.send(bytes(smg.upper(),'ascii'))
 			Process(acc,addr)
 
-		if(smg=='GET / HTTP/1.1'):
-			WebHanlder(acc,addr)
+		except Exception as e:
+			print(e)
+			print('Connection lost from {0}'.format(addr))
+			lst_con.remove(str(addr))
 			return
-		print('from {0} : {1}'.format(addr,smg))
-		if(smg=='cmds'):
-			acc.send(bytes('1.fltrans/n2:path'))
-			cmd = int((acc.recv(1024)).decode())
-			scmd(cmd,acc,addr)
-			Process(acc,addr)
-		print('from {0},{1} : {2}'.format(lst_con.index(addr),addr,smg))			
-		acc.send(bytes(smg.upper(),'ascii'))
-		Process(acc,addr)
 
 	while(True):
 		acc,addr = s.accept()
 		print('Connection from : {0}'.format(addr))
 		acc.send(bytes(cmd,'ascii')) #main2
-		lst_con.append(addr)
+		lst_con.append(str(addr))
 		thread = threading.Thread(target=Process,args=(acc,addr,))
 		thread.daemon = True
 		thread.start()
