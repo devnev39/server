@@ -62,9 +62,7 @@ try:
 	def Process(acc,addr):
 		try:
 			smg = (acc.recv(1024)).decode()
-			if(smg=='get_cons'):
-				print('from {0},{1} : {2}'.format(lst_con.count(addr),addr,smg))
-				acc.send(bytes(constr(),'ascii'))
+			print('from {0} : {1}'.format(addr,smg))
 
 			if(isAddr(smg)):
 				acc.send(bytes('Not ready yet...','ascii'))
@@ -74,8 +72,7 @@ try:
 			if(smg=='get_cons'):
 				acc.send(bytes(getCons(),'ascii'))
 				Process(acc,addr)
-
-			print('from {0} : {1}'.format(addr,smg))
+			
 			if(smg=='cmds'):
 				acc.send(bytes('1.fltrans/n2:path'))
 				cmd = int((acc.recv(1024)).decode())
@@ -94,7 +91,9 @@ try:
 			print(e)
 			print('Connection lost from {0}'.format(addr))
 			lst_con.remove(str(addr))
-			return
+			acc.close()
+
+			
 
 	while(True):
 		acc,addr = s.accept()
