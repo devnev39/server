@@ -12,8 +12,12 @@ while(connected):
 		print('No listener....')
 
 while(True):
-	print('from server : {0}'.format((s.recv(1024)).decode()))
-	s.send(bytes(input('you : '),'ascii'))
+	try:
+		print('from server : {0}'.format((s.recv(1024)).decode()))
+		s.send(bytes(input('you : '),'ascii'))
+	except Exception as e:
+		print(e)
+		print('Exiting... You need to reconnect....')
+		break
 
-	
-
+print('Exiting....')	

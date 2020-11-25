@@ -3,6 +3,9 @@ import threading
 
 lst_con = []
 
+class exit(Exception):
+	pass
+
 def constr():
 	s = ''
 	for e in lst_con:
@@ -10,7 +13,7 @@ def constr():
 
 	return s		
 
-cmd = 'get_cons : get all client\nconnect $<addr> : conenct to a client'
+cmd = 'get_cons : get all client\nconnect $<addr> : conenct to a client\nexiT0 : exit'
 
 s = socket.socket()
 try:
@@ -78,11 +81,16 @@ try:
 				cmd = int((acc.recv(1024)).decode())
 				scmd(cmd,acc,addr)
 				Process(acc,addr)
+			
+			if(smg=='exiT0'):
+				print('from {0} : Exit request...'.format(addr))
+				raise exit('Client Exited 0....')
+
 			print('from {0},{1} : {2}'.format(lst_con.index(str(addr)),addr,smg))			
 			acc.send(bytes(smg.upper(),'ascii'))
 			Process(acc,addr)
 
-		except Exception as e:
+		except (exit,Exception) as e:
 			print(e)
 			print('Connection lost from {0}'.format(addr))
 			lst_con.remove(str(addr))
