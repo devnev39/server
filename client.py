@@ -1,5 +1,8 @@
 import socket
 
+class exit(Exception):
+	pass
+
 s = socket.socket()
 connected = 1
 
