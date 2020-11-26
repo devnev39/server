@@ -37,7 +37,7 @@ try:
 			return lt[1]
 
 	def isAddr(smg):
-		if(smg.count('$')!=0):
+		if(smg.count('$')):
 			lt = smg.split('$')
 			if(len(lst_con)!=0 & lst_con.count(lt[1])==1):
 				return True
