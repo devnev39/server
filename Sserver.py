@@ -1,5 +1,7 @@
 import socket
 import threading
+import os 
+import sys
 
 lst_con = []
 
@@ -62,7 +64,8 @@ try:
 	def Process(acc,addr):
 		try:
 			smg = (acc.recv(1024)).decode()
-			print('from {0} : {1}'.format(addr,smg))
+
+			print('from {0},{1} : {2}'.format(lst_con.index(str(addr)),addr,smg))		
 
 			if(isAddr(smg)):
 				acc.send(bytes('Not ready yet...','ascii'))
@@ -73,32 +76,30 @@ try:
 				acc.send(bytes(getCons(),'ascii'))
 				Process(acc,addr)
 			
-			if(smg=='cmds'):
-				acc.send(bytes('1.fltrans/n2:path'))
-				cmd = int((acc.recv(1024)).decode())
-				scmd(cmd,acc,addr)
-				Process(acc,addr)
-			
 			if(smg=='exiT0'):
-				print('from {0} : Exit request...'.format(addr))
-				raise exit('Client Exited 0....')
+				print('exit request...')
+				acc.send(bytes('Exit req. received..\nYou can type any to close now......','ascii'))
+				raise Exception('disconnecting with client...')
 
-			print('from {0},{1} : {2}'.format(lst_con.index(str(addr)),addr,smg))			
+				
 			acc.send(bytes(smg.upper(),'ascii'))
 			Process(acc,addr)
 
-		except (exit,Exception) as e:
-			print(e)
-			print('Connection lost from {0}'.format(addr))
-			lst_con.remove(str(addr))
+		except Exception as e:
+			exc_type, exc_obj, exc_tb = sys.exc_info()
+			print(f'Handler : {e}')
+			print('Connection lost from {0} on process {1} line {2}'.format(addr,os.getpid(),exc_tb.tb_lineno))
 			acc.close()
+			print('Remote conneciton closed...')
+			if(lst_con.count(str(addr))):
+				lst_con.remove(str(addr))				
 
 			
 
 	while(True):
 		acc,addr = s.accept()
 		print('Connection from : {0}'.format(addr))
-		acc.send(bytes(cmd,'ascii')) #main2
+		acc.send(bytes(f'You : {addr} \n {cmd}','ascii')) #main2
 		lst_con.append(str(addr))
 		thread = threading.Thread(target=Process,args=(acc,addr,))
 		thread.daemon = True
