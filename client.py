@@ -8,7 +8,7 @@ connected = 1
 
 while(connected):
 	try:
-		s.connect((socket.gethostname(),1234))
+		s.connect((socket.gethostname(),8888))
 		print('Connected......')
 		connected = 0
 	except socket.error:
