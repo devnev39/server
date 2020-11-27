@@ -23,6 +23,15 @@ def process(acc,addr,lst_con):
 		smg = (acc.recv(1024)).decode()
 		print('from {0},{1} : {2}'.format(lst_con.index(str(addr)),addr,smg))		
 
+		if(smg=='snd10004'):
+			acc.send(bytes('reqPath10004$enter the path or file name : ','ascii'))
+			resp = acc.recv(1024)
+			if(resp.count('$')):
+				file_name = (resp.split('$'))[0]
+				size = int((resp.split('$'))[1])
+
+				#this is to be done tommarrow
+
 		if(isAddr(smg)):
 			acc.send(bytes('Not ready yet...','ascii'))
 			process(acc,addr,lst_con)
