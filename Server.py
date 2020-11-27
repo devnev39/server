@@ -4,7 +4,7 @@ import threading
 
 lst_con = []
 
-cmd = 'get_cons : get all client\nconnect $<addr> : conenct to a client\nexiT0 : exit'
+cmd = '\nget_cons : get all client\nconnect $<addr> : conenct to a client\nexiT0 : exit\nsnd10004 : send a file'
 
 def start(port):
 	s = socket.socket()
