@@ -1,6 +1,6 @@
 import socket
 import cprocess as cp
-from os import path 
+from os import path as pa
 
 class exit(Exception):
 	pass
@@ -23,11 +23,13 @@ while(True):
 		if(cp.check(smg)):
 			print('from server : {0}'.format((smg.split('$'))[1]))
 			path = input()
-			if(path.exists(path)):
-				fnsz,data = cp.getLsts()
+			if(pa.exists(path)):
+				fnsz,data = cp.getLsts(path)
 				s.send(bytes(fnsz,'ascii'))
 				s.send(data)
 				print('sent successfully...')
+				s.send(bytes(input('you : '),'ascii'))
+				continue
 			else:
 				print('Wrong path...')
 				continue				
@@ -39,3 +41,4 @@ while(True):
 		break
 
 print('Exiting....')	
+input()

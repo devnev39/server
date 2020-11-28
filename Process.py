@@ -25,7 +25,7 @@ def process(acc,addr,lst_con):
 
 		if(smg=='snd10004'):
 			acc.send(bytes('reqPath10004$enter the path or file name : ','ascii'))
-			resp = acc.recv(1024)
+			resp = (acc.recv(1024)).decode()
 			if(resp.count('$')):
 				file_name = (resp.split('$'))[0]
 				size = int((resp.split('$'))[1])
@@ -33,7 +33,8 @@ def process(acc,addr,lst_con):
 				data = acc.recv(size)
 				with open(file_name,'wb') as file:
 					file.write(data)
-				print('received a file from {0}'.format(addr))					
+				print('received a file from {0}'.format(addr))	
+				process(acc,addr,lst_con)								
 
 				#this is to be done tommarrow
 

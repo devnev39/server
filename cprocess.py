@@ -8,14 +8,14 @@ def check(smg):
 	return False			
 
 
-def getLsts(path):
-	if(os.path.exists(path)):
+def getLsts(pa):
+	if(os.path.exists(pa)):
 		lst = 0
-		with open(path,'rb') as file:
+		with open(pa,'rb') as file:
 			lst = file.read()
 	else:
 		return 0
-	fname = (path.split('\\'))[len(path.split('\\'))-1]
-	sz = len(lst)
+	fname = (pa.split('\\'))[len(pa.split('\\'))-1]
+	sz = str(len(lst))
 	return f'{fname}${sz}' , lst
 	
