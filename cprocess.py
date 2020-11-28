@@ -1,26 +1,21 @@
 import os 
 
-lst = 0
-
-path = 'C:\\Users\\Home\\Desktop\\Flute Fl Record.mp3'
-
-if(os.path.exists(path)):
+def check(smg):
+	if(smg.count('$')):
+		if((smg.split('$'))[0]=='reqPath10004'):
+			return True
 	
-	with open(path,'rb') as file:
-		lst = file.read()
-		print(len(lst))
-		print(type(lst))
-
-else:
-	print('it dont')
-
-print(type(lst))
-
-with open('test.mp3','wb') as file:
-	file.write(lst)
-	print('finished writing...')
+	return False			
 
 
-
-lst = bytes('This is for test','ascii')
-print(type(lst))
+def getLsts(path):
+	if(os.path.exists(path)):
+		lst = 0
+		with open(path,'rb') as file:
+			lst = file.read()
+	else:
+		return 0
+	fname = (path.split('\\'))[len(path.split('\\'))-1]
+	sz = len(lst)
+	return f'{fname}${sz}' , lst
+	

@@ -1,4 +1,6 @@
 import socket
+import cprocess as cp
+from os import path 
 
 class exit(Exception):
 	pass
@@ -16,6 +18,19 @@ while(connected):
 
 while(True):
 	try:
+		smg = (s.recv(1024)).decode()
+
+		if(cp.check(smg)):
+			print('from server : {0}'.format((smg.split('$'))[1]))
+			path = input()
+			if(path.exists(path)):
+				fnsz,data = cp.getLsts()
+				s.send(bytes(fnsz,'ascii'))
+				s.send(data)
+				print('sent successfully...')
+			else:
+				print('Wrong path...')
+				continue				
 		print('from server : {0}'.format((s.recv(1024)).decode()))
 		s.send(bytes(input('you : '),'ascii'))
 	except Exception as e:

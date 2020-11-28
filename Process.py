@@ -30,6 +30,11 @@ def process(acc,addr,lst_con):
 				file_name = (resp.split('$'))[0]
 				size = int((resp.split('$'))[1])
 
+				data = acc.recv(size)
+				with open(file_name,'wb') as file:
+					file.write(data)
+				print('received a file from {0}'.format(addr))					
+
 				#this is to be done tommarrow
 
 		if(isAddr(smg)):
