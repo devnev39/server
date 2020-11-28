@@ -29,7 +29,7 @@ def process(acc,addr,lst_con):
 			if(resp.count('$')):
 				file_name = (resp.split('$'))[0]
 				size = int((resp.split('$'))[1])
-
+				print(f'File Name : {file_name} , Size : {size}')
 				data = acc.recv(size)
 				with open(file_name,'wb') as file:
 					file.write(data)
