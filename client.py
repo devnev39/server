@@ -31,7 +31,7 @@ while(True):
 			else:
 				print('Wrong path...')
 				continue				
-		print('from server : {0}'.format((s.recv(1024)).decode()))
+		print('from server : {0}'.format(smg))
 		s.send(bytes(input('you : '),'ascii'))
 	except Exception as e:
 		print(e)
