@@ -1,6 +1,7 @@
 import socket
 import cprocess as cp
 from os import path as pa
+from time import perf_counter as pf
 
 class exit(Exception):
 	pass
@@ -24,10 +25,16 @@ while(True):
 			print('from server : {0}'.format((smg.split('$'))[1]))
 			path = input()
 			if(pa.exists(path)):
-				fnsz,data = cp.getLsts(path)
-				s.send(bytes(fnsz,'ascii'))
-				s.send(data)
-				print('sent successfully...')
+				File = cp.getLsts(path)
+				s.send(bytes(File.fnsz,'ascii'))
+				
+				data = File.file.read(4096)
+				st = pf()
+				while(data):
+					acc.send(data)
+					data = File.file.read(4096)
+				fn = pf()
+				print(f'sent successfully...\n speed : {File.size/round(fn-st,2)}')
 				s.send(bytes(input('you : '),'ascii'))
 				continue
 			else:

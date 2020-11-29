@@ -1,5 +1,13 @@
 import os 
 
+class FileProp:
+
+	def __init__(self,fnsz,file,fname,size):
+		self.file = file
+		self.fname = fname
+		self.size = size
+		self.fnsz = fnsz
+
 def check(smg):
 	if(smg.count('$')):
 		if((smg.split('$'))[0]=='reqPath10004'):
@@ -10,12 +18,12 @@ def check(smg):
 
 def getLsts(pa):
 	if(os.path.exists(pa)):
-		lst = 0
-		with open(pa,'rb') as file:
-			lst = file.read()
+		file = open(pa,'rb')
+		lst = file.read()
 	else:
 		return 0
 	fname = (pa.split('\\'))[len(pa.split('\\'))-1]
 	sz = str(len(lst))
-	return f'{fname}${sz}' , lst
+	return f'{fname}${sz}' , file
+
 	

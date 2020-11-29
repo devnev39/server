@@ -30,9 +30,13 @@ def process(acc,addr,lst_con):
 				file_name = (resp.split('$'))[0]
 				size = int((resp.split('$'))[1])
 				print(f'File Name : {file_name} , Size : {size}')
-				data = acc.recv(size)
-				with open(file_name,'wb') as file:
+
+				file = open(file_name,'wb')
+				data = acc.recv(4096)
+				while(data):
 					file.write(data)
+					data = acc.recv(4096)
+					
 				print('received a file from {0}'.format(addr))	
 				process(acc,addr,lst_con)								
 
