@@ -24,6 +24,7 @@ def getLsts(pa):
 		return 0
 	fname = (pa.split('\\'))[len(pa.split('\\'))-1]
 	sz = str(len(lst))
-	return f'{fname}${sz}' , file
+	fnsz = f'{fname}${sz}'
+	return FileProp(fnsz,file,fname,sz)
 
 	

@@ -2,6 +2,7 @@ import socket
 import cprocess as cp
 from os import path as pa
 from time import perf_counter as pf
+import sys
 
 class exit(Exception):
 	pass
@@ -32,6 +33,7 @@ while(True):
 				st = pf()
 				while(data):
 					acc.send(data)
+					print('packed sent')
 					data = File.file.read(4096)
 				fn = pf()
 				print(f'sent successfully...\n speed : {File.size/round(fn-st,2)}')
@@ -43,8 +45,9 @@ while(True):
 		print('from server : {0}'.format(smg))
 		s.send(bytes(input('you : '),'ascii'))
 	except Exception as e:
+		ext,exobj,exwhere = sys.exc_info()
 		print(e)
-		print('Exiting... You need to reconnect....')
+		print(f'Exiting... You need to reconnect.... {exwhere.tb_lineno}')
 		break
 
 print('Exiting....')	
