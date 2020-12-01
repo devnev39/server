@@ -32,10 +32,11 @@ def process(acc,addr,lst_con):
 				print(f'File Name : {file_name} , Size : {size}')
 
 				file = open(file_name,'wb')
-				data = acc.recv(4096)
+				data = acc.recv(2048)
+				print('-->alpha pack received...')
 				while(data):
 					file.write(data)
-					data = acc.recv(4096)
+					data = acc.recv(2048)
 					
 				print('received a file from {0}'.format(addr))	
 				process(acc,addr,lst_con)								

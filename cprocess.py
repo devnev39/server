@@ -17,14 +17,25 @@ def check(smg):
 
 
 def getLsts(pa):
-	if(os.path.exists(pa)):
-		file = open(pa,'rb')
-		lst = file.read()
-	else:
-		return 0
-	fname = (pa.split('\\'))[len(pa.split('\\'))-1]
-	sz = str(len(lst))
-	fnsz = f'{fname}${sz}'
-	return FileProp(fnsz,file,fname,sz)
+	try:
+		print('->into processor')
+		file = 0
+		if(os.path.exists(pa)):
+			file = open(pa,'rb')
+			lst = file.read()
+			print('->read completed...')
+		else:
+			return 0
+
+		fname = (pa.split('\\'))[len(pa.split('\\'))-1]
+		sz = str(len(lst))
+		fnsz = f'{fname}${sz}'
+
+		return FileProp(fnsz,file,fname,sz)
+	except Exception as e:
+		raise e
+	
+	
+	
 
 	

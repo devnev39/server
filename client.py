@@ -28,15 +28,15 @@ while(True):
 			if(pa.exists(path)):
 				File = cp.getLsts(path)
 				s.send(bytes(File.fnsz,'ascii'))
+				print(f'File Size : {File.size}')
+				data = File.file.read(2048)
 				
-				data = File.file.read(4096)
-				st = pf()
 				while(data):
 					acc.send(data)
 					print('packed sent')
-					data = File.file.read(4096)
-				fn = pf()
-				print(f'sent successfully...\n speed : {File.size/round(fn-st,2)}')
+					data = File.file.read(2048)
+				
+				print('sent successfully...')
 				s.send(bytes(input('you : '),'ascii'))
 				continue
 			else:
