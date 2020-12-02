@@ -22,13 +22,13 @@ def sendFile(pa,sck):
 				packets = math.floor(size/PACK_SIZE)
 				remains = size - (packets*PACK_SIZE)
 				packets+=1
-
-			fnsz = f'File : {fname} size : {size} packets : {packets} packsize : {PACK_SIZE} reamins : {remains}'
+			fnsz = f'{fname}${size}${packets}${PACK_SIZE}${remains}'
+			print(f'File : {fname} size : {size} packets : {packets} packsize : {PACK_SIZE} reamins : {remains}')
 			sck.send(bytes(fnsz,'ascii'))				
 			file.seek(0)
 			sent = 0
 			for x in range(packets):
-				if(x==(packets-1)):
+				if(x==(packets-1) & remains!=0):
 					data = file.read(remains)
 					sck.send(data)
 					print('last sent...') 				

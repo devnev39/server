@@ -27,17 +27,23 @@ def process(acc,addr,lst_con):
 			acc.send(bytes('reqPath10004$enter the path or file name : ','ascii'))
 			resp = (acc.recv(1024)).decode()
 			if(resp.count('$')):
-				file_name = (resp.split('$'))[0]
+				fname = (resp.split('$'))[0]
 				size = int((resp.split('$'))[1])
-				print(f'File Name : {file_name} , Size : {size}')
-
-				file = open(file_name,'wb')
-				data = acc.recv(2048)
-				print('-->alpha pack received...')
-				while(data):
-					file.write(data)
-					data = acc.recv(2048)
-					
+				packets = int((resp.split('$'))[2])
+				PACK_SIZE = int((resp.split('$'))[3])
+				remains = int((resp.split('$'))[4])
+				print(f'File : {fname} size : {size} packets : {packets} packsize : {PACK_SIZE} reamins : {remains}')
+				received = 0
+				with open(fname,'wb') as file:
+					for x in range(packets):
+						if(x==(packets-1) & remains!=0):
+							data = acc.recv(PACK_SIZE)
+							file.write(data)
+							print('final pack received..')
+						data = acc.recv(PACK_SIZE)
+						file.write(data)
+						received+=PACK_SIZE
+						print(f'{(received*100)/size} % received..')
 				print('received a file from {0}'.format(addr))	
 				process(acc,addr,lst_con)								
 
