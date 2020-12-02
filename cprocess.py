@@ -1,13 +1,5 @@
 import os 
-
-class FileProp:
-
-	def __init__(self,fnsz,file,fname,size):
-		self.file = file
-		self.fname = fname
-		self.size = size
-		self.fnsz = fnsz
-
+import math
 def check(smg):
 	if(smg.count('$')):
 		if((smg.split('$'))[0]=='reqPath10004'):
@@ -16,22 +8,37 @@ def check(smg):
 	return False			
 
 
-def getLsts(pa):
+def sendFile(pa,sck):
 	try:
-		print('->into processor')
-		file = 0
-		if(os.path.exists(pa)):
-			file = open(pa,'rb')
-			lst = file.read()
-			print('->read completed...')
-		else:
-			return 0
+		PACK_SIZE = 1500 #1024 bytes at a time 
+		with open(pa,'rb') as file:
+			print('reading file..')
+			data = file.read()
+			fname = (pa.split('//'))[(len(pa.split('//')))-1]
+			size = len(data)
+			packets = 1
+			remains = 0
+			if(size>1024):
+				packets = math.floor(size/PACK_SIZE)
+				remains = size - (packets*PACK_SIZE)
+				packets+=1
 
-		fname = (pa.split('\\'))[len(pa.split('\\'))-1]
-		sz = str(len(lst))
-		fnsz = f'{fname}${sz}'
+			fnsz = f'File : {fname} size : {size} packets : {packets} packsize : {PACK_SIZE} reamins : {remains}'
+			sck.send(bytes(fnsz,'ascii'))				
+			file.seek(0)
+			sent = 0
+			for x in range(packets):
+				if(x==(packets-1)):
+					data = file.read(remains)
+					sck.send(data)
+					print('last sent...') 				
+				data = file.read(PACK_SIZE)
+				sck.send(PACK_SIZE)
+				sent += PACK_SIZE
+				print(f'{(x*100)/size} % sent')
+			print('file sent....')	
 
-		return FileProp(fnsz,file,fname,sz)
+
 	except Exception as e:
 		raise e
 	

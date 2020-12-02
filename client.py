@@ -26,17 +26,7 @@ while(True):
 			print('from server : {0}'.format((smg.split('$'))[1]))
 			path = input()
 			if(pa.exists(path)):
-				File = cp.getLsts(path)
-				s.send(bytes(File.fnsz,'ascii'))
-				print(f'File Size : {File.size}')
-				data = File.file.read(2048)
-				
-				while(data):
-					acc.send(data)
-					print('packed sent')
-					data = File.file.read(2048)
-				
-				print('sent successfully...')
+				cp.sendFile(path,s)
 				s.send(bytes(input('you : '),'ascii'))
 				continue
 			else:

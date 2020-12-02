@@ -9,7 +9,7 @@ def getCons(lst_con):
 	print(s)								
 	return s
 
-def isAddr(smg):
+def isAddr(smg,lst_con):
 
 	if(smg.count('$')):
 		lt = smg.split('$')
@@ -43,7 +43,7 @@ def process(acc,addr,lst_con):
 
 				#this is to be done tommarrow
 
-		if(isAddr(smg)):
+		if(isAddr(smg,lst_con)):
 			acc.send(bytes('Not ready yet...','ascii'))
 			process(acc,addr,lst_con)
 
@@ -62,7 +62,7 @@ def process(acc,addr,lst_con):
 		process(acc,addr,lst_con)
 
 	except Exception as e:
-		exc_type, exc_obj, exc_tb = sys.exc_info()
+		a, b, exc_tb = sys.exc_info()
 		print(f'Handler : {e}')
 		print('Connection lost from {0} on process {1} line {2}'.format(addr,os.getpid(),exc_tb.tb_lineno))
 		acc.close()
