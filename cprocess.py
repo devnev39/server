@@ -1,5 +1,5 @@
 import os 
-import math
+import math,sys
 def check(smg):
 	if(smg.count('$')):
 		if((smg.split('$'))[0]=='reqPath10004'):
@@ -14,7 +14,7 @@ def sendFile(pa,sck):
 		with open(pa,'rb') as file:
 			print('reading file..')
 			data = file.read()
-			fname = (pa.split('//'))[(len(pa.split('//')))-1]
+			fname = (pa.split('\\'))[len(pa.split('\\'))-1]
 			size = len(data)
 			packets = 1
 			remains = 0
@@ -33,13 +33,15 @@ def sendFile(pa,sck):
 					sck.send(data)
 					print('last sent...') 				
 				data = file.read(PACK_SIZE)
-				sck.send(PACK_SIZE)
+				sck.send(data)
 				sent += PACK_SIZE
 				print(f'{(x*100)/size} % sent')
 			print('file sent....')	
 
 
 	except Exception as e:
+		a,b,ex = sys.exc_info()
+		print(f'Exception at : {ex.tb_lineno} : {e}')
 		raise e
 	
 	

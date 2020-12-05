@@ -37,7 +37,7 @@ def process(acc,addr,lst_con):
 				with open(fname,'wb') as file:
 					for x in range(packets):
 						if(x==(packets-1) & remains!=0):
-							data = acc.recv(PACK_SIZE)
+							data = acc.recv(remains)
 							file.write(data)
 							print('final pack received..')
 						data = acc.recv(PACK_SIZE)
