@@ -24,7 +24,18 @@ def start(port):
 		while(True):
 			acc,addr = s.accept()
 			print('Connection from : {0}'.format(addr))
-			acc.send(bytes(f'You : {addr} \n {cmd}','ascii')) #main2
+
+			smg = (acc.recv(5000)).decode()
+
+			
+			if(processor.isWeb(smg)):
+				t = threading.Thread(target=processor.WebHandler,args=(acc,))
+				t.daemon = True
+				t.start()
+				continue
+			else:
+				acc.send(bytes(f'You : {addr} \n {cmd}','ascii'))						
+			 #main2
 			lst_con.append(str(addr))
 			
 			t = threading.Thread(target=processor.process,args=(acc,addr,lst_con))

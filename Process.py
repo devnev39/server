@@ -17,12 +17,28 @@ def isAddr(smg,lst_con):
 			return True
 
 	return False
+def isWeb(smg):
+	if(smg.count('\n')):
+		ss = smg.split('\n')
+		for s in ss:
+			if(s=='GET / HTTP/1.1\r'):
+				return True
+	return False
+
+def WebHandler(acc):
+	print('web socket request.....')
+	data = 'HTTP/1.1 200 OK\r\n'
+	data+= 'Content-Type: text/html; charset=utf-8\r\n'
+	data+= '\r\n'
+	data+= '<html><title>Client</title><body><h1>Under Development...</body></html>\r\n\r\n'
+	acc.sendall(data.encode())
+	acc.close()
+
 def process(acc,addr,lst_con):
 	try:
 
 		smg = (acc.recv(1024)).decode()
 		print('from {0},{1} : {2}'.format(lst_con.index(str(addr)),addr,smg))		
-
 		if(smg=='snd10004'):
 			acc.send(bytes('reqPath10004$enter the path or file name : ','ascii'))
 			resp = (acc.recv(1024)).decode()

@@ -14,6 +14,7 @@ while(connected):
 	try:
 		s.connect((socket.gethostname(),8888))
 		print('Connected......')
+		s.send(bytes('client.py|normal|socket|pc','ascii'))
 		connected = 0
 	except socket.error:
 		print('No listener....')
